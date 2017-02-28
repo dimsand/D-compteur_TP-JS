@@ -1,5 +1,7 @@
 # Décompteur de temps Javascript
 
+![Capture d'écran](./screenshot_tp_temps_restant.png)
+
 ## Fonctionnalités
 - Décompte de temps avant les pauses de cours
   - 10h30 _(pause matin)_
