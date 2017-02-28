@@ -63,15 +63,21 @@
     var pause_matin = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 30, 0, 0);
     var pause_midi = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 30, 0, 0);
     var pause_aprem = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 30, 0, 0);
-    var fin_cours = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 17, 30, 0, 0);
+    var fin_cours = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 17, 25, 0, 0);
     var temps_restants;
     var cas = "";
+
+    var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+    Notification.requestPermission(function (permission) {
+      //console.log(permission);
+    });
 
     timeout();
 
     function timeout() {
       setTimeout(function () {
-          now = new Date();
+          var now = new Date();
+          var now_heure = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), 0);
           if(now < pause_matin){
             temps_restants = (pause_matin.getTime() - now.getTime()) / (60 * 1000);
             diff = pause_matin - now;
@@ -84,10 +90,19 @@
             temps_restants = (pause_aprem.getTime() - now.getTime()) / (60 * 1000);
             diff = pause_aprem - now;
             cas = "la pause";
-          }else{
+          }else if(now >= pause_aprem && now <= fin_cours){
             temps_restants = (fin_cours.getTime() - now.getTime()) / (60 * 1000);
             diff = fin_cours - now;
             cas = "la fin du cours";
+          }else{
+            //alert("A DEMAIN !");
+            return false;
+          }
+          console.log("NOW : "+now.getTime());
+          console.log("FIN COURS : "+fin_cours.getTime());
+          if(now_heure.getTime() == pause_matin.getTime() || now_heure.getTime() == pause_midi.getTime() || now_heure.getTime() == pause_aprem.getTime() || now_heure.getTime() == fin_cours.getTime()){
+            console.log('test');
+            notifyMe();
           }
 
           diff = Math.floor(diff/1000);       // Nombre de secondes entre les 2 dates
@@ -120,6 +135,28 @@
           timeout();
       }, 1000);
     }
+
+    // Notification HTML5
+    function notifyMe(){
+			var instance = new Notification(
+				"Fin du décompte", {
+					body: "C'est " + cas + " !"
+				}
+			);
+			instance.onclick = function () {
+				// Something to do
+			};
+			instance.onerror = function () {
+				// Something to do
+			};
+			instance.onshow = function () {
+				// Something to do
+			};
+			instance.onclose = function () {
+				// Something to do
+			};
+    }
+
   </script>
 
 </html>
