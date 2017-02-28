@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Temps avant la pause</title>
+    <style>
+    body{
+      text-align: center;
+      margin: 0;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+    }
+    h1{
+        font-size: 50px;
+    }
+    #temps_restant{
+      font-weight: bold;
+    }
+    @font-face {
+        font-family: digitsFont;
+        src: url(digital-7.ttf);
+    }
+    #horloge{
+      color: #e74c3c;
+      text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+      height: 100%;
+      min-height: 600px;
+      display: flex;
+      font-family: digitsFont;
+      font-size: 300px;
+      justify-content: center;
+      align-items: center;
+    }
+    #footer{
+      position: fixed;
+      bottom: 0;
+      height:30px;
+      padding-top: 10px;
+      background-color: #34495e;
+      width: 100%;
+      color: #ffffff;
+    }
+    </style>
+    <script src="jquery-3.1.1.min.js"></script>
+  </head>
+  <body>
+    <h1>Temps restant avant la pause</h1>
+
+    <div id="horloge">
+      <div id="heures">0</div>
+      <div class="separator">:</div>
+      <div id="minutes">00</div>
+      <div class="separator">:</div>
+      <div id="secondes">00</div>
+    </div>
+    <div id="footer">Il reste <span id="temps_restant"></span> minute(s) avant la pause</div>
+
+  </body>
+
+  <script>
+    var today = new Date();
+    var sec, min, heure, diff;
+    var pause_matin = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 30, 0, 0);
+    var pause_midi = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 30, 0, 0);
+    var pause_aprem = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 30, 0, 0);
+    var temps_restants;
+
+    timeout();
+
+    function timeout() {
+      setTimeout(function () {
+          now = new Date();
+          if(now < pause_matin){
+            temps_restants = (pause_matin.getTime() - now.getTime()) / (60 * 1000);
+            diff = pause_matin - now;
+          }else if(now >= pause_matin && now < pause_midi){
+            temps_restants = (pause_midi.getTime() - now.getTime()) / (60 * 1000);
+            diff = pause_midi - now;
+          }else if(now >= pause_midi && now < pause_aprem){
+            temps_restants = (pause_aprem.getTime() - now.getTime()) / (60 * 1000);
+            diff = pause_aprem - now;
+          }
+
+          diff = Math.floor(diff/1000);       // Nombre de secondes entre les 2 dates
+          sec = diff % 60;                    // Extraction du nombre de secondes
+          if(sec < 10){
+            sec = "0" + sec;
+          }
+
+          diff = Math.floor((diff-sec)/60);    // Nombre de minutes (partie entière)
+          min = diff % 60;                    // Extraction du nombre de minutes
+          if(min < 10){
+            min = "0" + min;
+          }
+
+          diff = Math.floor((diff-min)/60);    // Nombre d'heures (entières)
+          heure = diff % 24;
+          if(min < 10){
+            heure = "0" + heure;
+          }
+
+          temps_restants = parseInt(temps_restants);
+          $('#temps_restant').html(Math.round(temps_restants));
+          if( temps_restants <= (10 - 1) ){
+            $('#horloge').css({'color': '#27ae60'});
+          }
+          $('#heures').html(heure);
+          $('#minutes').html(min);
+          $('#secondes').html(sec);
+          timeout();
+      }, 1000);
+    }
+  </script>
+
+</html>
