@@ -44,7 +44,7 @@
     <script src="jquery-3.1.1.min.js"></script>
   </head>
   <body>
-    <h1>Temps restant avant la pause</h1>
+    <h1>Temps restant avant <span class="cas"></span></h1>
 
     <div id="horloge">
       <div id="heures">0</div>
@@ -53,7 +53,7 @@
       <div class="separator">:</div>
       <div id="secondes">00</div>
     </div>
-    <div id="footer">Il reste <span id="temps_restant"></span> minute(s) avant la pause</div>
+    <div id="footer">Il reste <span id="temps_restant"></span> minute(s) avant <span class="cas"></span></div>
 
   </body>
 
@@ -63,7 +63,9 @@
     var pause_matin = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 30, 0, 0);
     var pause_midi = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 30, 0, 0);
     var pause_aprem = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 30, 0, 0);
+    var fin_cours = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 17, 30, 0, 0);
     var temps_restants;
+    var cas = "";
 
     timeout();
 
@@ -73,12 +75,19 @@
           if(now < pause_matin){
             temps_restants = (pause_matin.getTime() - now.getTime()) / (60 * 1000);
             diff = pause_matin - now;
+            cas = "la pause";
           }else if(now >= pause_matin && now < pause_midi){
             temps_restants = (pause_midi.getTime() - now.getTime()) / (60 * 1000);
             diff = pause_midi - now;
+            cas = "la pause";
           }else if(now >= pause_midi && now < pause_aprem){
             temps_restants = (pause_aprem.getTime() - now.getTime()) / (60 * 1000);
             diff = pause_aprem - now;
+            cas = "la pause";
+          }else{
+            temps_restants = (fin_cours.getTime() - now.getTime()) / (60 * 1000);
+            diff = fin_cours - now;
+            cas = "la fin du cours";
           }
 
           diff = Math.floor(diff/1000);       // Nombre de secondes entre les 2 dates
@@ -101,6 +110,7 @@
 
           temps_restants = parseInt(temps_restants);
           $('#temps_restant').html(Math.round(temps_restants));
+          $('.cas').html(cas);
           if( temps_restants <= (10 - 1) ){
             $('#horloge').css({'color': '#27ae60'});
           }
