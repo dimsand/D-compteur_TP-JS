@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Temps avant la pause</title>
+    <link rel="icon" type="image/png" href="clock.png" />
     <style>
     body{
       text-align: center;
@@ -132,6 +133,7 @@
           $('#heures').html(heure);
           $('#minutes').html(min);
           $('#secondes').html(sec);
+          document.title = heure+":"+min+":"+sec+" restant";
           timeout();
       }, 1000);
     }
