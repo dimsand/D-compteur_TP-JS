@@ -4,9 +4,9 @@
 
 ## Fonctionnalités
 - Décompte de temps avant les pauses de cours
-  - 10h30 _(pause matin)_
+  - 10h45 _(pause matin)_
   - 12h30 _(pause déjeuner)_
-  - 15h30 _(pause après-midi)_
+  - 15h45 _(pause après-midi)_
   - 17h30 _(fin des cours)_
 - Gestion heures, minutes, secondes restantes
 - Style horloge
